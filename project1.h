@@ -8,11 +8,14 @@ struct _block {
   size_t size;
   int isFree;
   struct _block * next;
-  struct _block * prev;
+  struct _block * prev; 
+
 };
 typedef struct _block block;
 
 
+void *add_new_block(block * curr_block, size_t size, block * pre_block);
+void print_blocks();
 //First Fit malloc/free
 void *ff_malloc(size_t size);
 void ff_free(int *ptr);
