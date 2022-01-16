@@ -4,13 +4,13 @@
 #include <stdlib.h>
 
 
-struct metadata {
+struct _block {
   size_t size;
-  int isfree;
-  struct metadata * next;
-  struct metadata * prev;
+  int isFree;
+  struct _block * next;
+  struct _block * prev;
 };
-typedef struct metadata Metadata;
+typedef struct _block block;
 
 
 //First Fit malloc/free

@@ -7,9 +7,10 @@
 int main()
 {
   
-  int *ptr = NULL;
+  
   for(size_t i = 0; i < 5; i++){
-    ff_free(ptr);
+    int *ptr = ff_malloc(128);
+    printf("%d",*ptr);
   }
   
   
