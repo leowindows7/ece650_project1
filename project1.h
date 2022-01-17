@@ -18,7 +18,7 @@ void *add_new_block(block * curr_block, size_t size, block * pre_block);
 void print_blocks();
 //First Fit malloc/free
 void *ff_malloc(size_t size);
-void ff_free(int *ptr);
+void ff_free(void *ptr);
 //Best Fit malloc/free
 void *bf_malloc(size_t size);
 void bf_free(void *ptr);

@@ -14,7 +14,7 @@ void print_blocks(){
   block * curr = head_block;
   int i = 0;
   while (curr != NULL) {
-    printf("%d(%ld)->", i, curr->size);
+    printf("%d(%ld,%d)->", i, curr->size,curr->isFree);
     curr = curr->next;
     i += 1;
   }
@@ -32,10 +32,29 @@ void *add_new_block(block * curr_block, size_t size, block * pre_block){
 }
 
 
+/*void *split_block(block * curr_block, size_t size){
+ if (curr_block->size > size + sizeof(block)) {
+    block * splitted_block;
+    splitted_block = (block *)((char *)curr_block + sizeof(block) + size);
+    splitted_block->size = curr_block->size - size - sizeof(block);
+    splitted_block->isFree = 1;
+    splitted_block->next = NULL;
+    splitted_block->prev = NULL;
 
-void *split_block(){
-
-}
+    //remove_block(p);
+    // add_block(splitted_block);
+    curr_block->size = size;
+    free_space -= (size + sizeof(block));
+  }
+  else {
+    //remove_block(p);
+    free_space -= (curr_block->size + sizeof(block));
+  }
+  curr_block->isFree = 0;
+  curr_block->next = NULL;
+  curr_block->prev = NULL;
+  return (char *)curr_block + sizeof(block);
+  }*/
 
 
 
@@ -52,7 +71,7 @@ void *ff_malloc(size_t size){
     block * currPre_block = NULL;
     while (curr_block != NULL) {
       if(curr_block->size >= size) {
-	return split_block(curr_block,size);
+	//return split_block(curr_block,size);
       }
       currPre_block = curr_block;
       curr_block = curr_block->next;
@@ -67,8 +86,30 @@ void *ff_malloc(size_t size){
  
 }
 
-void ff_free(int *ptr){
-  printf("Hello World bitch\n");
+void check_merge(){
+  block * curr = head_block;
+  while (curr != NULL) {
+   if ((curr->next != NULL) && ((char *)curr + curr->size + sizeof(block) == (char *)curr->next)) {
+     curr->size += sizeof(block) + curr->next->size;
+     curr->next->next = NULL;
+     curr->next->prev = NULL;
+   }
+   if ((curr->prev != NULL) && ((char *)curr->prev + curr->prev->size + sizeof(block) == (char *)curr)) {
+    curr->prev->size += sizeof(block) + curr->size;
+    curr->next = NULL;
+    curr->prev = NULL;
+   }
+   curr = curr->next;
+ }
+}
+
+void ff_free(void *ptr){
+  block * block_toFree;
+  block_toFree = (block *)((char *)ptr - sizeof(block));
+  block_toFree->isFree = 1;
+  free_space += block_toFree->size + sizeof(block);
+  check_merge();
+  //printf("%ld\n",block_toFree->size);
 }
 
 
