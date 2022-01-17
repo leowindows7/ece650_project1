@@ -86,20 +86,24 @@ void *ff_malloc(size_t size){
  
 }
 
-void check_merge(){
+void 
+
+void check_merge(block * block_toFree){
   block * curr = head_block;
+  block * block_toFree_ass = (char *)block_toFree + block_toFree->size + sizeof(block);
   while (curr != NULL) {
-   if ((curr->next != NULL) && ((char *)curr + curr->size + sizeof(block) == (char *)curr->next)) {
-     curr->size += sizeof(block) + curr->next->size;
-     curr->next->next = NULL;
-     curr->next->prev = NULL;
-   }
-   if ((curr->prev != NULL) && ((char *)curr->prev + curr->prev->size + sizeof(block) == (char *)curr)) {
-    curr->prev->size += sizeof(block) + curr->size;
-    curr->next = NULL;
-    curr->prev = NULL;
-   }
-   curr = curr->next;
+    block * curr_ass = (char *)curr + curr->size + sizeof(block);    
+    if(curr == block_toFree_ass || curr_ass == block_toFree){
+      //remove curr
+      remove_block(curr){
+      }
+      //insert new block to list
+      
+    }
+    if(curr_ass == block_toFree){
+      curr->size += sizeof(block) + block_toFree->size;
+    }
+    curr = curr->next;
  }
 }
 
@@ -108,7 +112,7 @@ void ff_free(void *ptr){
   block_toFree = (block *)((char *)ptr - sizeof(block));
   block_toFree->isFree = 1;
   free_space += block_toFree->size + sizeof(block);
-  check_merge();
+  check_merge(block_toFree);
   //printf("%ld\n",block_toFree->size);
 }
 
